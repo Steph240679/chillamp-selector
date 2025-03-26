@@ -29,18 +29,20 @@
             {% endfor %}
         </select><br><br>
 
-        <label>Baffle :</label>
+        <label for="baffle">Baffle :</label>
         <select name="baffle" id="baffle" required>
             {% for b in baffles %}
             <option value="{{ b }}">{{ b }}</option>
             {% endfor %}
         </select><br><br>
 
-        <label>Effets :</label><br>
-        {% for effet in effets %}
-            <input type="checkbox" name="effets" value="{{ effet }}"> {{ effet }}<br>
-        {% endfor %}
-
+        <fieldset>
+            <legend>Effets :</legend>
+            {% for effet in effets %}
+                <input type="checkbox" name="effets[]" value="{{ effet }}" id="effet_{{ loop.index }}">
+                <label for="effet_{{ loop.index }}">{{ effet }}</label><br>
+            {% endfor %}
+        </fieldset>
         <br>
         <input type="submit" value="🎉 Générer le PDF">
     </form>
