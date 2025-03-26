@@ -6,31 +6,43 @@
     <title>Chillamp Selector</title>
 </head>
 <body>
-    <form method="post" action="/generate">
-        <label>Bassiste :</label>
-        <select name="bassiste">
-            {% for b in bassists %}<option>{{ b }}</option>{% endfor %}
-        </select><br>
+    <h1>🎛️ Chillamp Selector</h1>
+    <form action="/generate" method="post">
+        <label for="bassiste">Bassiste :</label>
+        <select name="bassiste" id="bassiste" required>
+            {% for b in bassists %}
+            <option value="{{ b }}">{{ b }}</option>
+            {% endfor %}
+        </select><br><br>
 
-        <label>Basse :</label>
-        <select name="basse">
-            {% for b in basses %}<option>{{ b }}</option>{% endfor %}
-        </select><br>
+        <label for="basse">Basse :</label>
+        <select name="basse" id="basse" required>
+            {% for b in basses %}
+            <option value="{{ b }}">{{ b }}</option>
+            {% endfor %}
+        </select><br><br>
 
-        <label>Ampli :</label>
-        <select name="ampli">
-            {% for a in amps %}<option>{{ a }}</option>{% endfor %}
-        </select><br>
+        <label for="ampli">Ampli :</label>
+        <select name="ampli" id="ampli" required>
+            {% for a in amplis %}
+            <option value="{{ a }}">{{ a }}</option>
+            {% endfor %}
+        </select><br><br>
 
         <label>Baffle :</label>
-        <select name="baffle">
-            {% for c in cabs %}<option>{{ c }}</option>{% endfor %}
-        </select><br>
+        <select name="baffle" id="baffle" required>
+            {% for b in baffles %}
+            <option value="{{ b }}">{{ b }}</option>
+            {% endfor %}
+        </select><br><br>
 
         <label>Effets :</label><br>
-        {% for e in effects %}<input type="checkbox" name="effets" value="{{e}}">{{e}}<br>{% endfor %}
+        {% for effet in effets %}
+            <input type="checkbox" name="effets" value="{{ effet }}"> {{ effet }}<br>
+        {% endfor %}
 
-        <button type="submit">Générer PDF</button>
+        <br>
+        <input type="submit" value="🎉 Générer le PDF">
     </form>
 </body>
 </html>
