@@ -1,14 +1,21 @@
+
 from flask import Flask, render_template, request, send_file
 from fpdf import FPDF
 import io
-from presets import get_bassists, get_presets_for_combination
+from presets import get_bassists, get_presets_for_combination, basses, amplis, effets_disponibles, baffles
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    bassists = get_bassists()
-    return render_template('index.html', bassists=bassists)
+    return render_template(
+        'index.html',
+        bassists=get_bassists(),
+        basses=basses,
+        amplis=amplis,
+        effets=effets_disponibles,
+        baffles=baffles
+    )
 
 @app.route('/generate', methods=['POST'])
 def generate():
@@ -23,11 +30,9 @@ def generate():
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-
     pdf.set_title("Chillamp Selector - Preset personnalisé")
 
-    # Suppression de l'émoji 🎸 qui provoque l'erreur Unicode
-    pdf.cell(200, 10, txt="Chillamp Selector - Preset personnalisé", ln=True, align="C")
+    pdf.cell(200, 10, txt="🎸 Chillamp Selector - Preset personnalisé", ln=True, align="C")
     pdf.ln(10)
 
     pdf.cell(200, 10, txt=f"Bassiste : {bassiste}", ln=True)
