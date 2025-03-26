@@ -1,85 +1,76 @@
 
+basses = ["Jazz Bass S-1", "Precision American Standard"]
+amplis = ["Chillamp Beta", "Genz-Benz Streamliner STM-600"]
+effets_disponibles = ["Hyper Luminal", "Vintage Microtubes", "Bass Whammy"]
+baffles = ["Chillamp Classic 1x15"]
+
 def get_bassists():
-    return [
-        "Nate Mendel",
-        "Laurent Vernerey"
-    ]
+    return ["Nate Mendel", "Laurent Vernerey"]
 
 def get_presets_for_combination(bassiste, basse, ampli, effets, baffle):
-    presets = {}
+    preset = {}
 
-    # Réglages spécifiques par bassiste
-    if bassiste == "Nate Mendel":
-        presets["Basse"] = {
-            "Tone": "80%",
-            "Volume": "100%"
+    # Réglages basse
+    if basse == "Jazz Bass S-1":
+        preset["Basse"] = {
+            "Sélecteur": "Position 1 (série)",
+            "Volume": "100%",
+            "Tone": "70%"
         }
-        if ampli == "Beta":
-            presets["Ampli"] = {
-                "Volume (1964)": "7",
-                "Bass (1964)": "6",
-                "Treble (1964)": "5",
-                "Master": "6"
-            }
-        if "Empress EQ" in effets:
-            presets["Empress EQ"] = {
-                "Low": "+2dB",
-                "Mid": "+4dB",
-                "High": "+1dB",
-                "Q": "Narrow",
-                "Gain": "Unity"
-            }
-        if "Hyper Luminal" in effets:
-            presets["Hyper Luminal"] = {
-                "Blend": "60%",
-                "Time": "50%",
-                "Output": "80%",
-                "Ratio": "4:1",
-                "Mode": "FET"
-            }
-
-    elif bassiste == "Laurent Vernerey":
-        presets["Basse"] = {
-            "Tone": "50%",
-            "Volume": "100%"
+    elif basse == "Precision American Standard":
+        preset["Basse"] = {
+            "Volume": "100%",
+            "Tone": "80%"
         }
-        if ampli == "STM-600":
-            presets["Ampli"] = {
-                "Gain": "5",
-                "Volume": "6",
-                "Bass": "5",
-                "Mid": "4",
-                "Treble": "5",
-                "Master": "6"
-            }
-        if "Empress EQ" in effets:
-            presets["Empress EQ"] = {
-                "Low": "+1dB",
-                "Mid": "+3dB",
-                "High": "0dB",
-                "Q": "Medium",
-                "Gain": "Unity"
-            }
-        if "Hyper Luminal" in effets:
-            presets["Hyper Luminal"] = {
-                "Blend": "40%",
-                "Time": "40%",
-                "Output": "75%",
-                "Ratio": "3:1",
-                "Mode": "SYM"
-            }
 
-    # Réglage par défaut pour les effets restants
+    # Réglages ampli
+    if ampli == "Chillamp Beta":
+        preset["Ampli"] = {
+            "Volume": "4",
+            "Treble": "5",
+            "Medium": "6",
+            "Bass": "7"
+        }
+    elif ampli == "Genz-Benz Streamliner STM-600":
+        preset["Ampli"] = {
+            "Gain": "3",
+            "Volume": "5",
+            "Bass": "6",
+            "Mid": "5",
+            "Treble": "6",
+            "Master": "4"
+        }
+
+    # Réglages effets
     for effet in effets:
-        if effet not in presets:
-            presets[effet] = {
-                "Réglage 1": "50%",
-                "Réglage 2": "50%"
+        if effet == "Hyper Luminal":
+            if bassiste == "Nate Mendel":
+                preset["Hyper Luminal"] = {
+                    "Blend": "60%",
+                    "Time": "25%",
+                    "Output": "70%",
+                    "Ratio": "4:1",
+                    "Mode": "FET"
+                }
+            elif bassiste == "Laurent Vernerey":
+                preset["Hyper Luminal"] = {
+                    "Blend": "50%",
+                    "Time": "50%",
+                    "Output": "60%",
+                    "Ratio": "2:1",
+                    "Mode": "BUS"
+                }
+        elif effet == "Vintage Microtubes":
+            preset["Vintage Microtubes"] = {
+                "Drive": "40%",
+                "Tone": "50%",
+                "Blend": "60%",
+                "Level": "70%"
+            }
+        elif effet == "Bass Whammy":
+            preset["Bass Whammy"] = {
+                "Mode": "Octave Up",
+                "Wet/Dry": "50%"
             }
 
-    # Chaîne du signal
-    presets["Chaîne du signal"] = {
-        "Ordre": f"{basse} → {' → '.join(effets)} → {ampli} → {baffle}"
-    }
-
-    return presets
+    return preset
