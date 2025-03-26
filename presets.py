@@ -1,16 +1,40 @@
 
+# Définition des options disponibles
 basses = ["Jazz Bass S-1", "Precision American Standard"]
 amplis = ["Chillamp Beta", "Genz-Benz Streamliner STM-600"]
 effets_disponibles = ["Hyper Luminal", "Vintage Microtubes", "Bass Whammy"]
 baffles = ["Chillamp Classic 1x15"]
 
-def get_bassists():
+def get_bassists() -> list[str]:
+    """
+    Retourne la liste des bassistes disponibles.
+    """
     return ["Nate Mendel", "Laurent Vernerey"]
 
-def get_presets_for_combination(bassiste, basse, ampli, effets, baffle):
+def get_presets_for_combination(
+    bassiste: str, 
+    basse: str, 
+    ampli: str, 
+    effets: list[str], 
+    baffle: str
+) -> dict:
+    """
+    Génère et retourne un dictionnaire de réglages (preset)
+    en fonction de la combinaison d'options choisie.
+    
+    Paramètres:
+      - bassiste: le nom du bassiste
+      - basse: le modèle de basse sélectionné
+      - ampli: le modèle d'ampli sélectionné
+      - effets: la liste des effets sélectionnés
+      - baffle: le modèle de baffle sélectionné
+      
+    Retourne:
+      Un dictionnaire contenant les réglages pour la basse, l'ampli et les effets.
+    """
     preset = {}
 
-    # Réglages basse
+    # Réglages pour la basse
     if basse == "Jazz Bass S-1":
         preset["Basse"] = {
             "Sélecteur": "Position 1 (série)",
@@ -23,7 +47,7 @@ def get_presets_for_combination(bassiste, basse, ampli, effets, baffle):
             "Tone": "80%"
         }
 
-    # Réglages ampli
+    # Réglages pour l'ampli
     if ampli == "Chillamp Beta":
         preset["Ampli"] = {
             "Volume": "4",
@@ -41,7 +65,7 @@ def get_presets_for_combination(bassiste, basse, ampli, effets, baffle):
             "Master": "4"
         }
 
-    # Réglages effets
+    # Réglages pour les effets
     for effet in effets:
         if effet == "Hyper Luminal":
             if bassiste == "Nate Mendel":
@@ -74,3 +98,4 @@ def get_presets_for_combination(bassiste, basse, ampli, effets, baffle):
             }
 
     return preset
+
