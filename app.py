@@ -1,64 +1,65 @@
-
 from flask import Flask, render_template, request, send_file
 from fpdf import FPDF
-from presets import get_presets_for_bassist
 import io
+from presets import get_bassists, get_presets_for_combination
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    bassists = ["Nate Mendel", "Laurent Vernerey"]
-    basses = ["Jazz Bass S-1", "Precision Standard"]
-    amps = ["Chillamp Beta"]
-    cabs = ["Classic 1x15"]
-    effects = ["Hyper Luminal", "Vintage Microtubes", "Boss Reverb"]
-    return render_template('index.html', bassists=bassists, basses=basses, amps=amps, cabs=cabs, effects=effects)
+    bassists = get_bassists()
+    return render_template('index.html', bassists=bassists)
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.form.to_dict(flat=False)
-    bassist = data.get('bassiste', [''])[0]
-    bass = data.get('basse', [''])[0]
-    amp = data.get('ampli', [''])[0]
-    cab = data.get('baffle', [''])[0]
-    selected_effects = data.get('effets', [])
+    bassiste = request.form.get("bassiste")
+    basse = request.form.get("basse")
+    ampli = request.form.get("ampli")
+    effets = request.form.getlist("effets")
+    baffle = request.form.get("baffle")
 
-    preset = get_presets_for_bassist(bassist, bass, amp, cab, selected_effects)
+    preset = get_presets_for_combination(bassiste, basse, ampli, effets, baffle)
 
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=f"Chillamp Selector - {bassist}", ln=True, align='C')
+
+    pdf.set_title("Chillamp Selector - Preset personnalisé")
+
+    pdf.cell(200, 10, txt="🎸 Chillamp Selector - Preset personnalisé", ln=True, align="C")
     pdf.ln(10)
 
-    pdf.cell(200, 10, txt=f"Basse : {bass}", ln=True)
-    for param, value in preset['bass'].items():
-        pdf.cell(200, 10, txt=f"  - {param} : {value}", ln=True)
+    pdf.cell(200, 10, txt=f"Bassiste : {bassiste}", ln=True)
+    pdf.cell(200, 10, txt=f"Basse : {basse}", ln=True)
+    pdf.cell(200, 10, txt=f"Ampli : {ampli}", ln=True)
+    pdf.cell(200, 10, txt=f"Baffle : {baffle}", ln=True)
+    pdf.cell(200, 10, txt="Effets :", ln=True)
+    for effet in effets:
+        pdf.cell(200, 10, txt=f" - {effet}", ln=True)
+
+    pdf.ln(10)
+    pdf.set_font("Arial", style="B", size=12)
+    pdf.cell(200, 10, txt="Réglages détaillés :", ln=True)
+    pdf.set_font("Arial", size=12)
+
+    for section, réglages in preset.items():
+        pdf.cell(200, 10, txt=f"{section} :", ln=True)
+        for paramètre, valeur in réglages.items():
+            pdf.cell(200, 10, txt=f"  - {paramètre} : {valeur}", ln=True)
+        pdf.ln(2)
 
     pdf.ln(5)
-    pdf.cell(200, 10, txt=f"Ampli : {amp}", ln=True)
-    for param, value in preset['amp'].items():
-        pdf.cell(200, 10, txt=f"  - {param} : {value}", ln=True)
-
-    pdf.ln(5)
-    pdf.cell(200, 10, txt=f"Baffle : {cab}", ln=True)
-    pdf.ln(5)
-
-    if selected_effects:
-        pdf.cell(200, 10, txt="Effets :", ln=True)
-        for effect in selected_effects:
-            pdf.cell(200, 10, txt=f"- {effect}", ln=True)
-            for param, value in preset['effects'].get(effect, {}).items():
-                pdf.cell(200, 10, txt=f"   - {param} : {value}", ln=True)
-    else:
-        pdf.cell(200, 10, txt="Aucun effet sélectionné", ln=True)
+    pdf.set_font("Arial", style="B", size=12)
+    pdf.cell(200, 10, txt="Chaîne du signal :", ln=True)
+    pdf.set_font("Arial", size=12)
+    chain = f"{basse} → " + " → ".join(effets) + f" → {ampli} → {baffle}"
+    pdf.multi_cell(0, 10, txt=chain)
 
     pdf_output = io.BytesIO()
     pdf.output(pdf_output)
     pdf_output.seek(0)
 
-    return send_file(pdf_output, as_attachment=True, download_name="preset.pdf", mimetype='application/pdf')
+    return send_file(pdf_output, download_name="preset.pdf", as_attachment=True)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
