@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chillamp Selector</title>
+</head>
+<body>
+    <form method="post" action="/generate">
+        <label>Bassiste :</label>
+        <select name="bassiste">
+            {% for b in bassists %}<option>{{ b }}</option>{% endfor %}
+        </select><br>
+
+        <label>Basse :</label>
+        <select name="basse">
+            {% for b in basses %}<option>{{ b }}</option>{% endfor %}
+        </select><br>
+
+        <label>Ampli :</label>
+        <select name="ampli">
+            {% for a in amps %}<option>{{ a }}</option>{% endfor %}
+        </select><br>
+
+        <label>Baffle :</label>
+        <select name="baffle">
+            {% for c in cabs %}<option>{{ c }}</option>{% endfor %}
+        </select><br>
+
+        <label>Effets :</label><br>
+        {% for e in effects %}<input type="checkbox" name="effets" value="{{e}}">{{e}}<br>{% endfor %}
+
+        <button type="submit">Générer PDF</button>
+    </form>
+</body>
+</html>
