@@ -39,7 +39,7 @@
         <fieldset>
             <legend>Effets :</legend>
             {% for effet in effets %}
-                <input type="checkbox" name="effets[]" value="{{ effet }}" id="effet_{{ loop.index }}">
+                <input type="checkbox" name="effets" value="{{ effet }}" id="effet_{{ loop.index }}">
                 <label for="effet_{{ loop.index }}">{{ effet }}</label><br>
             {% endfor %}
         </fieldset>
