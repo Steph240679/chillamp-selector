@@ -43,7 +43,7 @@ def generate():
         pdf.set_font("Arial", size=12)
         pdf.set_title("Chillamp Selector - Preset personnalisé")
 
-        pdf.cell(200, 10, txt="🎸 Chillamp Selector - Preset personnalisé", ln=True, align="C")
+        pdf.cell(200, 10, txt="Chillamp Selector - Preset personnalisé", ln=True, align="C")
         pdf.ln(10)
 
         pdf.cell(200, 10, txt=f"Bassiste : {bassiste}", ln=True)
