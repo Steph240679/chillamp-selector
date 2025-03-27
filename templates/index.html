@@ -1,9 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Chillamp Selector</title>
+    <script>
+        async function updateFidelityScore() {
+            const formData = new FormData(document.querySelector("form"));
+            const params = new URLSearchParams();
+            formData.forEach((value, key) => {
+                if (key === "effets") {
+                    params.append("effets", value);
+                } else {
+                    params.set(key, value);
+                }
+            });
+
+            const response = await fetch("/api/fidelite?" + params.toString());
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("fidelityScore").innerText = `🎯 Fidélité : ${data.score}%`;
+                document.getElementById("fidelityMessage").innerText = data.message;
+            } else {
+                document.getElementById("fidelityScore").innerText = "";
+                document.getElementById("fidelityMessage").innerText = "Impossible de calculer la fidélité.";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("select, input[type=checkbox]").forEach(el => {
+                el.addEventListener("change", updateFidelityScore);
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>🎛️ Chillamp Selector</h1>
@@ -43,7 +71,11 @@
                 <label for="effet_{{ loop.index }}">{{ effet }}</label><br>
             {% endfor %}
         </fieldset>
+
         <br>
+        <div id="fidelityScore" style="font-weight: bold; font-size: 1.2em;"></div>
+        <div id="fidelityMessage" style="margin-bottom: 15px; font-style: italic;"></div>
+
         <input type="submit" value="🎉 Générer le PDF">
     </form>
 </body>
