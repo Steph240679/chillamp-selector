@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, abort
+from flask import Flask, render_template, request, send_file, abort, jsonify
 from fpdf import FPDF
 import io
 from presets import (
@@ -23,6 +23,20 @@ def index():
         effets=effets_disponibles,
         baffles=baffles
     )
+
+@app.route('/api/fidelite')
+def api_fidelite():
+    bassiste = request.args.get("bassiste")
+    basse = request.args.get("basse")
+    ampli = request.args.get("ampli")
+    effets = request.args.getlist("effets")
+    baffle = request.args.get("baffle")
+
+    if not all([bassiste, basse, ampli, baffle]):
+        return jsonify({"score": 0, "message": "Paramètres manquants."}), 400
+
+    score, message = calculer_fidelite(bassiste, basse, ampli, effets, baffle)
+    return jsonify({"score": score, "message": message})
 
 @app.route('/generate', methods=['POST'])
 def generate():
