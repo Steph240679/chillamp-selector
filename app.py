@@ -70,7 +70,7 @@ def generate():
         pdf.cell(200, 10, txt="Chaîne du signal :", ln=True)
         pdf.set_font("Arial", size=12)
         # Construction de la chaîne du signal
-        chain = f"{basse} → " + " → ".join(effets) + f" → {ampli} → {baffle}"
+        chain = f"{basse} -> " + " -> ".join(effets) + f" → {ampli} → {baffle}"
         pdf.multi_cell(0, 10, txt=chain)
 
         # Création d'un flux mémoire pour le PDF
